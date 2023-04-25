@@ -1,6 +1,6 @@
 //Import model
-const post = require("../models/postModel")
-const comment = require("../models/commentModel")
+const Post = require("../models/postModel")
+const Comment = require("../models/commentModel")
 
 //Bussiness logic
 exports.createComment = async (req, res) => {
@@ -16,11 +16,12 @@ exports.createComment = async (req, res) => {
         const savedComment = await comment.save();
 
         //Find the post by Id, add the new comment to its comment array
-        const updatedPost = await post.findByIdAndUpdate(post,
+        const updatedPost = await Post.findByIdAndUpdate(post,
             { $push: { comment: savedComment._id } },
             { new: true })
             .populate("comment")//Populate the comment array with comment document
             .exec();
+
         res.json({
             post: updatedPost
         })
